@@ -1,26 +1,81 @@
-# Docker Setup
+# Docker Setup and Fundamentals
 
-## Create EC2 instance
+## Docker Concepts Overview
 
-1. Login to AWS account
-2. Select Mumbai region
-3. Go to EC2 instances
-4. Create EC2 instance with t3.medium size and 30 GB volume
+![Docker Concepts](Screenshots/1.Docker_Concepts.png)
+
+### Understanding the Flow
+
+The Docker workflow consists of three main stages:
+
+1. **Docker Pull & Run**
+   - Pull images from Docker Hub
+   - Run containers
+
+2. **Docker Image Build Workflow**
+   - Create custom images using Dockerfile
+   - Build → Run → Push to Docker Hub
+
+3. **Docker Compose**
+   - Manage multi-container applications
+   - Define services, networks, volumes
+
+---
+
+### Dockerfile Key Instructions
+
+- FROM → Base image
+- RUN → Execute commands
+- COPY → Copy files
+- WORKDIR → Set working directory
+- ENV → Environment variables
+- EXPOSE → Define ports
+- CMD / ENTRYPOINT → Container startup command
+
+---
+
+### Advanced Concepts
+
+- Multi-stage builds → optimized images
+- .dockerignore → exclude unnecessary files
+- Build stages → build + package separation
+
+
+---
+
+### Steps Performed
+
+1. Logged into AWS Console
+2. Selected **Mumbai region**
+3. Navigated to EC2 service
+4. Created an EC2 instance:
+   - Instance Type: t3.medium
+   - Storage: 30 GB
+   - OS: Amazon Linux
 
 ### EC2 instance created
 ![EC2](Screenshots/2.EC2_instance_created.png)
 
 ---
 
-## Install Docker on EC2 instance
+### Why Docker?
 
-Steps:
-1. Connect to the EC2 instance using SSH
-2. sudo dnf update -y
-3. sudo dnf install docker -y
-4. sudo systemctl enable docker
-5. sudo systemctl start docker
-6. sudo usermod -aG docker ec2-user
+Docker allows us to:
+- Run applications in isolated containers
+- Ensure consistency across environments
+- Simplify deployment process
+
+---
+
+### Steps Performed
+
+```bash
+sudo dnf update -y
+sudo dnf install docker -y
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -aG docker ec2-user
+```
 
 ### Docker Installed
 
@@ -30,16 +85,20 @@ Steps:
 ![Docker_Installed](Screenshots/5.3.Docker_Installed.png)
 ![Enable_Start_Useradd](Screenshots/6.Enable_Start_useradd_to_docker-group.png)
 
-### Test Docker
-
+### Verify Docker installation
+```bash
 docker version
 docker images (shows no images initially)
+```
+
 ![docker_version](Screenshots/7.test_docker.png)
 
 
 #### Run a test container
+```bash
 docker run hello-world (no images in local, so it pulls from the docker library)
 docker images (new hello-worls image is created)
+```
 
 ![run_hellow-world](Screenshots/8.Create_hellow-world_image.png)
 
