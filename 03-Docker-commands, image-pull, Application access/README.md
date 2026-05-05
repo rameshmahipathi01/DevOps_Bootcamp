@@ -176,6 +176,21 @@ docker rm myapp1
 # Or stop and remove the container in one command
 docker rm -f <CONTAINER-NAME>
 docker rm -f myapp1
+
+# List Docker images
+docker images
+
+# Remove Docker image using Image ID
+docker rmi <IMAGE-ID>
+
+# Example:
+docker rmi abc12345def6
+
+# Remove Docker image using Image Name and Tag
+docker rmi <IMAGE-NAME>:<IMAGE-TAG>
+
+# Example:
+docker rmi stacksimplify/retail-store-sample-ui:1.0.0
 ```
 
 ### containers and Images are removed
