@@ -73,4 +73,118 @@ docker run --name myapp1 -p 8888:80 -d ghcr.io/stacksimplify/retail-store-sample
 
 ---
 
-## Step3:  
+## Step3:  Connect to Docker Container Terminal
+We can connect to a running docker container to inspect or debug it:
+
+```bash
+# Connect to the container's terminal
+docker exec -it <CONTAINER-NAME> /bin/sh
+
+# Example:
+docker exec -it myapp1 /bin/sh
+
+# Inside the container, you can run the following commands:
+## Basic OS Info
+uname -a                    # Kernel version and system details
+cat /etc/os-release         # Check base OS details
+whoami                      # See current user (usually 'root')
+
+## File System + App Structure
+pwd                         # Current directory (usually /)
+ls                          # List files
+ls -l /app                  # Check where app.jar is located (if /app is used)
+
+## Java Runtime
+java -version               # Verify Java is installed and check version
+
+## Test Application (from inside container - Container port 8080)
+curl http://localhost:8080  # Send a request to the app running inside
+
+## Exit container shell
+exit                        # Exit from /bin/sh back to host shell
+```
+
+![docker-exec-it](Screenshots/9.%20Docker-exec-it-1.png)
+![docker-exec-it](Screenshots/10-Docker-exec-it-2.png)
+![docker-exec-it](Screenshots/12-docker-exec-it-exit.png)
+
+
+### Execute Commands Directly without connecting to the container
+
+```bash
+# List files/folders in the container's root directory
+docker exec -it myapp1 ls
+
+# Test if the application is running inside the container
+# Sends a request to the app on port 8080 (internal container port)
+docker exec -it myapp1 curl http://localhost:8080
+```
+
+![docker-exec-it-direct](Screenshots/11-Docker-exec-it-direct.png)
+
+
+## Step4: Stop, Start containers and access the application
+
+```bash
+# Stop a running container
+docker stop <CONTAINER-NAME>
+
+# Example:
+docker stop myapp1
+
+# Verify the container has stopped
+docker ps
+
+# Test if the application is down
+curl http://<EC2-Instance-Public-IP>:8888
+
+# Start the stopped container
+docker start <CONTAINER-NAME>
+
+# Example:
+docker start myapp1
+
+# Verify the container is running
+docker ps
+
+# Test if the application is back up
+curl http://<EC2-Instance-Public-IP>:8888
+```
+
+### Containers stopped and started
+![stop-container](Screenshots/13-Stop-start-docker-container.png)
+
+### Cotainer stopped and App is not accessible
+![app-not-accessible](Screenshots/14-contaner-stopped.png)
+
+### Container started again, app is accessible
+![app-is-accessible](Screenshots/14-container-started-app-accessible.png)
+
+---
+
+## Step5: Remove docker container and images
+
+```bash
+# Stop the container if it's still running
+docker stop <CONTAINER-NAME>
+docker stop myapp1
+
+# Remove the container
+docker rm <CONTAINER-NAME>
+docker rm myapp1
+
+# Or stop and remove the container in one command
+docker rm -f <CONTAINER-NAME>
+docker rm -f myapp1
+```
+
+### containers and Images are removed
+![remove-containers-and-images](Screenshots/15-ramove-docker-containers-and-images.png)
+
+---
+
+
+
+
+## Author
+Ramesh Mahipathi
