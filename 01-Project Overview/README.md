@@ -42,17 +42,17 @@ The application consists of **10 containers**, including:
 - UI Service (Java Spring Boot)
 
 
-### 🗄️ Databases (3)
+### Databases (3)
 - MySQL / MariaDB (Relational DB)
 - PostgreSQL (Relational DB)
 - DynamoDB (NoSQL)
 
 
-### ⚡ Caching Layer (1)
+### Caching Layer (1)
 - Redis
 
 
-### 📩 Messaging System (1)
+### Messaging System (1)
 - RabbitMQ / AWS SQS
 
 

@@ -104,6 +104,38 @@ docker images (new hello-worls image is created)
 
 ---
 
+### Waht happens in the BackGround?
+![Docker Terminology](Screenshots/11.%20Docker-Terminology.png)
+
+### When you run "docker run hello-world"
+
+Docker performs the following steps behind the scenes:
+
+---
+
+Step-by-Step:
+    1. Checks Local Image Cache
+        - Docker looks for the hello-world image on your EC2 instance.
+        - If it's not found locally, it automatically pulls it from Docker Hub.
+
+    2. Downloads the Image
+        - Docker downloads the image in layers (compressed segments).
+        - These layers are stored under /var/lib/docker/.
+
+    3. Creates a Container
+        - Docker uses the image to create a new container.
+        - Each container is an isolated environment with its own filesystem, network, and process space.
+
+    4. Runs the Container
+        - The container runs a small program that prints:
+        “Hello from Docker! This message shows that your installation appears to be working correctly.”
+
+    5. Container Exits
+        - Since the program completes immediately, the container stops.
+        - You can confirm this with: docker ps -a
+
+---
+
 ### List and remove containers
 
 ```bash
@@ -125,7 +157,6 @@ docker rmi $(docker images -q)
 ![list and remove docker images](Screenshots/10.%20list_and_remove_images.png)
 
 ---
-
 
 
 
