@@ -94,13 +94,38 @@ docker images (shows no images initially)
 ![docker_version](Screenshots/7.test_docker.png)
 
 
-#### Run a test container
+### Run a test container
 ```bash
 docker run hello-world (no images in local, so it pulls from the docker library)
 docker images (new hello-worls image is created)
 ```
 
 ![run_hellow-world](Screenshots/8.Create_hellow-world_image.png)
+
+---
+
+### List and remove containers
+
+```bash
+docker ps (lists running containers)
+docker ps -a (lists all container running and exited)
+docker ps -aq (lists all container ids)
+docker rm $(docker ps -aq) --> removes all containers
+```
+
+![list and remove docker containers](Screenshots/9.%20list_and_remove_containers.png)
+
+### List and remove images
+```bash
+docker images --> lists all images
+docker images -q --> lists all image ids
+docker rmi $(docker images -q)
+```
+
+![list and remove docker images](Screenshots/10.%20list_and_remove_images.png)
+
+---
+
 
 
 
