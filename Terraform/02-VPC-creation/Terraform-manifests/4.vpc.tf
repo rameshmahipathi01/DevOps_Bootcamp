@@ -47,7 +47,7 @@ resource "aws_route_table" "public_rt" {
   vpc_id = data.aws_vpc.existing.id
 
   route {
-    cidr_block = "10.0.0.0/0"
+    cidr_block = "10.0.0.0/16"
     gateway_id = data.aws_internet_gateway.existing_igw.id
   }
 
@@ -67,7 +67,7 @@ resource "aws_route_table" "private_rt" {
   vpc_id = data.aws_vpc.existing.id
 
   route {
-    cidr_block     = "10.0.0.0/0"
+    cidr_block     = "10.0.0.0/16"
     nat_gateway_id = aws_nat_gateway.nat.id
   }
 
