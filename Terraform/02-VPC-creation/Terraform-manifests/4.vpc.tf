@@ -46,11 +46,6 @@ resource "aws_nat_gateway" "nat" {
 resource "aws_route_table" "public_rt" {
   vpc_id = data.aws_vpc.existing.id
 
-  route {
-    cidr_block = "10.0.0.0/16"
-    gateway_id = data.aws_internet_gateway.existing_igw.id
-  }
-
   tags = merge(local.common_tags, {
     Name = "ramesh-public-rt"
   })
@@ -65,11 +60,6 @@ resource "aws_route_table_association" "public_assoc" {
 # Resource-7: Private Route Table
 resource "aws_route_table" "private_rt" {
   vpc_id = data.aws_vpc.existing.id
-
-  route {
-    cidr_block     = "10.0.0.0/16"
-    nat_gateway_id = aws_nat_gateway.nat.id
-  }
 
   tags = merge(local.common_tags, {
     Name = "ramesh-private-rt"

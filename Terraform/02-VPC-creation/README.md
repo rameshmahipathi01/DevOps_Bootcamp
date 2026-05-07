@@ -19,6 +19,8 @@ A VPC allows us to:
 
 A VPC acts like a private data center network inside AWS.
 
+---
+
 ## AWS VPC Architecture
 The following architecture represents a VPC with public and private networking components.
 
@@ -28,6 +30,8 @@ The following architecture represents a VPC with public and private networking c
 ![Traffic flow](screenshots/02-VPC-Traffic-Flow.png)
 ### Public and Private subnet routes
 ![Routes](screenshots/03-VPC-Public-Private-Routes.png)
+
+---
 
 ## Concepts covered
 ### Public and Private Subnets
@@ -141,6 +145,7 @@ Contains route:
 ```
 This enables outbound internet access for private subnet resources.
 
+---
 
 ## Terraform Concepts Covered
 | Concept | Purpose |
@@ -154,6 +159,7 @@ This enables outbound internet access for private subnet resources.
 | Outputs | Displays useful output values |
 | Local State | Stores Terraform state locally |
 
+---
 
 ## Project Structure
 ``` text
@@ -243,6 +249,325 @@ terraform plan
 # Terraform Apply
 terraform apply -auto-approve
 ```
+![init](screenshots/04-init-and-validate.png)
+![plan](screenshots/05-plan.png)
+![apply](screenshots/06-apply.png)
+![outputs](screenshots/08-outputs.png)
 
 ### Validate Resource creation from AWS console
 VPC, Subnets, NAT GW and RTs are created
+![resources created](screenshots/07-resources-created.png)
+
+---
+
+
+## State Management
+Terraform stores infrastructure metadata inside the terraform.tfstate file.
+
+The state file helps Terraform:
+- Track created resources
+- Compare current infrastructure with desired configuration
+- Detect infrastructure changes
+- Plan future updates
+
+Without the state file, Terraform cannot properly manage infrastructure lifecycle.
+
+![tf-state](screenshots/09-terraform-state.png)
+
+### Terraform State Commands
+#### terraform show
+Used to inspect Terraform state in a readable format.
+
+This helps in:
+- Debugging
+- Verifying created resources
+- Viewing stored resource attributes
+
+![tf-show](screenshots/11-tf-show.png)
+---
+
+### terraform state list
+Displays all resources currently tracked by Terraform.
+
+Example output:
+```text
+aws_vpc.main
+aws_subnet.public
+aws_subnet.private
+aws_internet_gateway.main
+```
+![tf-state-list](screenshots/12-tf-state-list.png)
+This command is useful for understanding how Terraform internally references resources.
+
+### Verift terraform state created
+```bash
+# Change Directory
+cd terraform-manifests
+
+# List Files
+ls -lrt
+Observation: You will find the file `terraform.tfstate`
+
+# Review terraform.tfstate
+cat terraform.tfstate
+```
+![tf-state-created](screenshots/10-tf-state-created.png)
+
+## Resource cleanup
+```bash
+terraform destroy
+```
+result
+```text
+ terraform destroy
+var.existing_vpc_id
+  Existing shared VPC ID
+
+  Enter a value: vpc-02358ddc1cb955bcd
+
+data.aws_vpc.existing: Reading...
+data.aws_availability_zones.available: Reading...
+aws_eip.nat: Refreshing state... [id=eipalloc-0b6d364d045efec19]
+data.aws_availability_zones.available: Read complete after 0s [id=ap-south-1]
+data.aws_vpc.existing: Read complete after 0s [id=vpc-02358ddc1cb955bcd]
+data.aws_internet_gateway.existing_igw: Reading...
+aws_route_table.public_rt: Refreshing state... [id=rtb-02dc284755e54f1c1]
+aws_route_table.private_rt: Refreshing state... [id=rtb-03d0c75917dbe375a]
+aws_subnet.private: Refreshing state... [id=subnet-01466d109ca23d7f5]
+aws_subnet.public: Refreshing state... [id=subnet-0182ac0e8814a42ab]
+data.aws_internet_gateway.existing_igw: Read complete after 1s [id=igw-095a43d99a5ec72d6]
+aws_route_table_association.private_assoc: Refreshing state... [id=rtbassoc-0134abfb96f16436e]
+aws_route_table_association.public_assoc: Refreshing state... [id=rtbassoc-0a0f6304df1b39aa5]
+aws_nat_gateway.nat: Refreshing state... [id=nat-0e6aff1e29068496b]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
+following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_eip.nat will be destroyed
+  - resource "aws_eip" "nat" {
+      - allocation_id            = "eipalloc-0b6d364d045efec19" -> null
+      - arn                      = "arn:aws:ec2:ap-south-1:454143665149:elastic-ip/eipalloc-0b6d364d045efec19" -> null
+      - association_id           = "eipassoc-0573205887c26a457" -> null
+      - domain                   = "vpc" -> null
+      - id                       = "eipalloc-0b6d364d045efec19" -> null
+      - network_border_group     = "ap-south-1" -> null
+      - network_interface        = "eni-03acc855301de09a0" -> null
+      - private_dns              = "ip-10-0-16-229.ap-south-1.compute.internal" -> null
+      - private_ip               = "10.0.16.229" -> null
+      - public_dns               = "ec2-13-205-60-105.ap-south-1.compute.amazonaws.com" -> null
+      - public_ip                = "13.205.60.105" -> null
+      - public_ipv4_pool         = "amazon" -> null
+      - region                   = "ap-south-1" -> null
+      - tags                     = {
+          - "Env"   = "Dev"
+          - "Name"  = "ramesh-bootcamp-nat-eip"
+          - "Owner" = "Ramesh"
+        } -> null
+      - tags_all                 = {
+          - "Env"   = "Dev"
+          - "Name"  = "ramesh-bootcamp-nat-eip"
+          - "Owner" = "Ramesh"
+        } -> null
+        # (6 unchanged attributes hidden)
+    }
+
+  # aws_nat_gateway.nat will be destroyed
+  - resource "aws_nat_gateway" "nat" {
+      - allocation_id                      = "eipalloc-0b6d364d045efec19" -> null
+      - association_id                     = "eipassoc-0573205887c26a457" -> null
+      - availability_mode                  = "zonal" -> null
+      - connectivity_type                  = "public" -> null
+      - id                                 = "nat-0e6aff1e29068496b" -> null
+      - network_interface_id               = "eni-03acc855301de09a0" -> null
+      - private_ip                         = "10.0.16.229" -> null
+      - public_ip                          = "13.205.60.105" -> null
+      - region                             = "ap-south-1" -> null
+      - regional_nat_gateway_address       = [] -> null
+      - secondary_allocation_ids           = [] -> null
+      - secondary_private_ip_address_count = 0 -> null
+      - secondary_private_ip_addresses     = [] -> null
+      - subnet_id                          = "subnet-0182ac0e8814a42ab" -> null
+      - tags                               = {
+          - "Env"   = "Dev"
+          - "Name"  = "ramesh-bootcamp-nat"
+          - "Owner" = "Ramesh"
+        } -> null
+      - tags_all                           = {
+          - "Env"   = "Dev"
+          - "Name"  = "ramesh-bootcamp-nat"
+          - "Owner" = "Ramesh"
+        } -> null
+      - vpc_id                             = "vpc-02358ddc1cb955bcd" -> null
+    }
+
+  # aws_route_table.private_rt will be destroyed
+  - resource "aws_route_table" "private_rt" {
+      - arn              = "arn:aws:ec2:ap-south-1:454143665149:route-table/rtb-03d0c75917dbe375a" -> null
+      - id               = "rtb-03d0c75917dbe375a" -> null
+      - owner_id         = "454143665149" -> null
+      - propagating_vgws = [] -> null
+      - region           = "ap-south-1" -> null
+      - route            = [] -> null
+      - tags             = {
+          - "Env"   = "Dev"
+          - "Name"  = "ramesh-private-rt"
+          - "Owner" = "Ramesh"
+        } -> null
+      - tags_all         = {
+          - "Env"   = "Dev"
+          - "Name"  = "ramesh-private-rt"
+          - "Owner" = "Ramesh"
+        } -> null
+      - vpc_id           = "vpc-02358ddc1cb955bcd" -> null
+    }
+
+  # aws_route_table.public_rt will be destroyed
+  - resource "aws_route_table" "public_rt" {
+      - arn              = "arn:aws:ec2:ap-south-1:454143665149:route-table/rtb-02dc284755e54f1c1" -> null
+      - id               = "rtb-02dc284755e54f1c1" -> null
+      - owner_id         = "454143665149" -> null
+      - propagating_vgws = [] -> null
+      - region           = "ap-south-1" -> null
+      - route            = [] -> null
+      - tags             = {
+          - "Env"   = "Dev"
+          - "Name"  = "ramesh-public-rt"
+          - "Owner" = "Ramesh"
+        } -> null
+      - tags_all         = {
+          - "Env"   = "Dev"
+          - "Name"  = "ramesh-public-rt"
+          - "Owner" = "Ramesh"
+        } -> null
+      - vpc_id           = "vpc-02358ddc1cb955bcd" -> null
+    }
+
+  # aws_route_table_association.private_assoc will be destroyed
+  - resource "aws_route_table_association" "private_assoc" {
+      - id             = "rtbassoc-0134abfb96f16436e" -> null
+      - region         = "ap-south-1" -> null
+      - route_table_id = "rtb-03d0c75917dbe375a" -> null
+      - subnet_id      = "subnet-01466d109ca23d7f5" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_route_table_association.public_assoc will be destroyed
+  - resource "aws_route_table_association" "public_assoc" {
+      - id             = "rtbassoc-0a0f6304df1b39aa5" -> null
+      - region         = "ap-south-1" -> null
+      - route_table_id = "rtb-02dc284755e54f1c1" -> null
+      - subnet_id      = "subnet-0182ac0e8814a42ab" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_subnet.private will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                                            = "arn:aws:ec2:ap-south-1:454143665149:subnet/subnet-01466d109ca23d7f5" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "ap-south-1a" -> null
+      - availability_zone_id                           = "aps1-az1" -> null
+      - cidr_block                                     = "10.0.116.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-01466d109ca23d7f5" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "454143665149" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "ap-south-1" -> null
+      - tags                                           = {
+          - "Env"   = "Dev"
+          - "Name"  = "Ramesh-06-priv-subnet"
+          - "Owner" = "Ramesh"
+        } -> null
+      - tags_all                                       = {
+          - "Env"   = "Dev"
+          - "Name"  = "Ramesh-06-priv-subnet"
+          - "Owner" = "Ramesh"
+        } -> null
+      - vpc_id                                         = "vpc-02358ddc1cb955bcd" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_subnet.public will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:ap-south-1:454143665149:subnet/subnet-0182ac0e8814a42ab" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "ap-south-1a" -> null
+      - availability_zone_id                           = "aps1-az1" -> null
+      - cidr_block                                     = "10.0.16.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-0182ac0e8814a42ab" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "454143665149" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - region                                         = "ap-south-1" -> null
+      - tags                                           = {
+          - "Env"   = "Dev"
+          - "Name"  = "Ramesh-06-pub-subnet"
+          - "Owner" = "Ramesh"
+        } -> null
+      - tags_all                                       = {
+          - "Env"   = "Dev"
+          - "Name"  = "Ramesh-06-pub-subnet"
+          - "Owner" = "Ramesh"
+        } -> null
+      - vpc_id                                         = "vpc-02358ddc1cb955bcd" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+Plan: 0 to add, 0 to change, 8 to destroy.
+
+Changes to Outputs:
+  - internet_gateway_id = "igw-095a43d99a5ec72d6" -> null
+  - nat_gateway_id      = "nat-0e6aff1e29068496b" -> null
+  - private_subnet_id   = "subnet-01466d109ca23d7f5" -> null
+  - public_subnet_id    = "subnet-0182ac0e8814a42ab" -> null
+  - vpc_id              = "vpc-02358ddc1cb955bcd" -> null
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+aws_route_table_association.public_assoc: Destroying... [id=rtbassoc-0a0f6304df1b39aa5]
+aws_route_table_association.private_assoc: Destroying... [id=rtbassoc-0134abfb96f16436e]
+aws_nat_gateway.nat: Destroying... [id=nat-0e6aff1e29068496b]
+aws_route_table_association.private_assoc: Destruction complete after 0s
+aws_route_table_association.public_assoc: Destruction complete after 0s
+aws_route_table.public_rt: Destroying... [id=rtb-02dc284755e54f1c1]
+aws_route_table.private_rt: Destroying... [id=rtb-03d0c75917dbe375a]
+aws_subnet.private: Destroying... [id=subnet-01466d109ca23d7f5]
+aws_subnet.private: Destruction complete after 1s
+aws_route_table.private_rt: Destruction complete after 1s
+aws_route_table.public_rt: Destruction complete after 1s
+aws_nat_gateway.nat: Still destroying... [id=nat-0e6aff1e29068496b, 10s elapsed]
+aws_nat_gateway.nat: Still destroying... [id=nat-0e6aff1e29068496b, 20s elapsed]
+aws_nat_gateway.nat: Still destroying... [id=nat-0e6aff1e29068496b, 30s elapsed]
+aws_nat_gateway.nat: Still destroying... [id=nat-0e6aff1e29068496b, 40s elapsed]
+aws_nat_gateway.nat: Still destroying... [id=nat-0e6aff1e29068496b, 50s elapsed]
+aws_nat_gateway.nat: Still destroying... [id=nat-0e6aff1e29068496b, 1m0s elapsed]
+aws_nat_gateway.nat: Destruction complete after 1m0s
+aws_eip.nat: Destroying... [id=eipalloc-0b6d364d045efec19]
+aws_subnet.public: Destroying... [id=subnet-0182ac0e8814a42ab]
+aws_subnet.public: Destruction complete after 1s
+aws_eip.nat: Destruction complete after 1s
+
+Destroy complete! Resources: 8 destroyed.
+```
+
+---
+## Author
+Ramesh Mahipathi
