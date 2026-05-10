@@ -29,6 +29,7 @@ Example:
 A module helps avoid repeating the same infrastructure code again and again.
 
 ## Types of Terraform Modules
+![tf-modules](screenshots/04-Terraform-Modules.png)
 
 1. Root Module
 The folder where Terraform commands are executed.
@@ -293,6 +294,128 @@ module "vpc" {
 | Calls modules               | Used by root module     |
 
 
+## VPC creation
+1. Init and Validate
+![init and validate](screenshots/init-and-validate.png)
+
+2. Terraform plan
+```hcl
+$ terraform plan
+module.vpc.data.aws_vpc.existing: Reading...
+module.vpc.data.aws_availability_zones.available: Reading...
+module.vpc.data.aws_availability_zones.available: Read complete after 0s [id=ap-south-1]
+module.vpc.data.aws_vpc.existing: Read complete after 1s [id=vpc-02358ddc1cb955bcd]
+module.vpc.data.aws_internet_gateway.existing_igw: Reading...
+module.vpc.data.aws_internet_gateway.existing_igw: Read complete after 0s [id=igw-095a43d99a5ec72d6]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # module.vpc.aws_route_table.public_rt will be created
+  + resource "aws_route_table" "public_rt" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "ap-south-1"
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + gateway_id                 = "igw-095a43d99a5ec72d6"
+                # (11 unchanged attributes hidden)
+            },
+        ]
+      + tags             = {
+          + "BU"          = "IA"
+          + "DM"          = "Bharath Advani"
+          + "EndDate"     = "2026-05-31"
+          + "Environment" = "dev"
+          + "Name"        = "dev-eks-public-rt"
+          + "Owner"       = "Ramesh"
+          + "Project"     = "EKS Bootcamp"
+          + "Terraform"   = "true"
+        }
+      + tags_all         = {
+          + "BU"          = "IA"
+          + "DM"          = "Bharath Advani"
+          + "EndDate"     = "2026-05-31"
+          + "Environment" = "dev"
+          + "Name"        = "dev-eks-public-rt"
+          + "Owner"       = "Ramesh"
+          + "Project"     = "EKS Bootcamp"
+          + "Terraform"   = "true"
+        }
+      + vpc_id           = "vpc-02358ddc1cb955bcd"
+    }
+
+  # module.vpc.aws_route_table_association.public_assoc will be created
+  + resource "aws_route_table_association" "public_assoc" {
+      + id             = (known after apply)
+      + region         = "ap-south-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.vpc.aws_subnet.public will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "ap-south-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.16.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "ap-south-1"
+      + tags                                           = {
+          + "BU"          = "IA"
+          + "DM"          = "Bharath Advani"
+          + "EndDate"     = "2026-05-31"
+          + "Environment" = "dev"
+          + "Name"        = "dev-eks-public-subnet"
+          + "Owner"       = "Ramesh"
+          + "Project"     = "EKS Bootcamp"
+          + "Terraform"   = "true"
+        }
+      + tags_all                                       = {
+          + "BU"          = "IA"
+          + "DM"          = "Bharath Advani"
+          + "EndDate"     = "2026-05-31"
+          + "Environment" = "dev"
+          + "Name"        = "dev-eks-public-subnet"
+          + "Owner"       = "Ramesh"
+          + "Project"     = "EKS Bootcamp"
+          + "Terraform"   = "true"
+        }
+      + vpc_id                                         = "vpc-02358ddc1cb955bcd"
+    }
+
+Plan: 3 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + internet_gateway_id = "igw-095a43d99a5ec72d6"
+  + public_subnet_az    = "ap-south-1a"
+  + public_subnet_id    = (known after apply)
+  + vpc_id              = "vpc-02358ddc1cb955bcd"
+
+```
+
+3. Terraform apply
+![terrafrom-apply](screenshots/03-tf-apply.png)
+
+4. Confirm resource creation from console
+![console-confirmation](screenshots/06-confirm-resource-creation.png)
+
+---
 ## Important Real-Time Best Practices
 1. Keep Modules Small
 

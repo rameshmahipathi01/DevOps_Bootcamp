@@ -397,6 +397,25 @@ kubectl get pods -n kube-system
 - Update history
 - Tags
 
+## Validation
+1. [subnets-creation](screenshots/11-subnets-creation.png)
+2. [eks-init-and-validate](screenshots/eks-tf-init-validate.png)
+3. [eks-plan](screenshots/03-eks-tf-plan.png)
+4. [eks-outputs](screenshots/05-eks-tf-output.png)
+
+## EKS validation
+1. Console validation
+![console-validation](screenshots/07-eks-validate-from-console.png)
+2. EKS networking
+![eks networking](screenshots/08-eks-networking.png)
+3. Kubectl comands
+![kubectl execution](screenshots/06-kubectl-commands.png)
+
+## Resource clean-up
+1. EKS cluster destroy
+![eks-cleanup](screenshots/09-eks-cleanup.png)
+2. VPC (subnets) destroy
+![vpc destroy](screenshots/10-vpc-destroyed.png)
 
 ---
 ## Author
