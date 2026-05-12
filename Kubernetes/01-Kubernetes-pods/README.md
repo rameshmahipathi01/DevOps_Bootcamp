@@ -3,7 +3,7 @@
 
 This project demonstrates the foundational Kubernetes concept of a Pod by deploying the Catalog microservice from the AWS Retail Store Sample Application.
 
-The objective of this demo is to understand how Kubernetes Pods work, how containers run inside Pods, and how Kubernetes manages containerized applications.
+The objective is to understand how Kubernetes Pods work, how containers run inside Pods, and how Kubernetes manages containerized applications.
 
 This section focuses on:
 - Pod creation
@@ -53,12 +53,63 @@ explain EVERY section.
 
 ---
 
-## Example Structure
-
-````markdown id="qj5d9t"
 ## Pod Manifest Overview
 
 The Pod manifest defines the desired state of the Catalog application Pod.
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  labels:
+    app.kubernetes.io/name: catalog
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: catalog
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: catalog
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: catalog
+          securityContext:
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          image: "public.ecr.aws/aws-containers/retail-store-sample-catalog:1.3.0"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+```
 
 ### API Version
 
@@ -139,7 +190,6 @@ If the readiness probe fails:
 THIS is what makes repo high quality.
 
 ---
-
 ## Deploy the Pod
 ```yaml
 kubectl apply -f 01_catalog_pod.yaml

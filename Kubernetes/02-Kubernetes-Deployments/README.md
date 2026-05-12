@@ -239,7 +239,7 @@ Check Pods:
 ```bash
 kubectl get pods -o wide
 ```
-![deployments-commands](screenshots/02-deployments-commands.png
+![deployments-commands](screenshots/02-deployments-commands.png)
 
 These commands help verify:
 - desired replicas
@@ -252,6 +252,7 @@ These commands help verify:
 ```bash
 kubectl rollout status deployment/catalog
 ```
+![rollout-status](screenshots/11-rollout-history.png)
 
 This command monitors deployment progress and confirms whether the rollout completed successfully.
 
@@ -282,7 +283,6 @@ Update the application image:
 kubectl set image deployment/catalog \
 catalog=public.ecr.aws/aws-containers/retail-store-sample-catalog:1.3.0
 ```
-
 Kubernetes gradually replaces old Pods with new Pods without downtime.
 
 ## Deployment Revision History
@@ -290,7 +290,7 @@ Kubernetes gradually replaces old Pods with new Pods without downtime.
 ```bash
 kubectl rollout history deployment/catalog
 ```
-
+![rollout-history](screenshots/11-rollout-history.png)
 Kubernetes maintains deployment revision history, allowing rollback to previous working versions if required.
 
 ## Rollback Deployment
@@ -300,7 +300,6 @@ Rollback to previous deployment revision:
 ```bash
 kubectl rollout undo deployment/catalog
 ```
-
 This restores the previously working application version in case of failed deployments or application issues.
 
 ## Cleanup
@@ -310,7 +309,9 @@ Delete the deployment:
 ```bash
 kubectl delete deployment catalog
 ```
+![rollback](screenshots/12-rollout-undo-and-cleanup.png)
 
+---
 ## Key Learning Outcomes
 
 This section covered the following Kubernetes concepts:
