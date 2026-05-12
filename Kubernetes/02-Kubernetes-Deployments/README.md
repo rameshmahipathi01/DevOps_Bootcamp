@@ -1,7 +1,7 @@
 # Kubernetes Deployments - Rolling Updates, Scaling and Rollbacks
 ## Introduction
 
-This section demonstrates how Kubernetes Deployments manage application Pods using ReplicaSets.
+This section explainss how Kubernetes Deployments manage application Pods using ReplicaSets.
 
 Unlike standalone Pods, Deployments provide:
 - Self-healing
@@ -326,3 +326,7 @@ This section covered the following Kubernetes concepts:
 - Container security context
 - Kubernetes rollout operations
 
+
+---
+Author
+Ramesh Mahipathi

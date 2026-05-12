@@ -8,7 +8,7 @@ environment_name = "dev"
 cluster_name = "ramesh-eks"
 
 # Kubernetes Version
-cluster_version = "1.30"
+cluster_version = "1.34"
 
 # Public Endpoint Access
 cluster_endpoint_public_access = true

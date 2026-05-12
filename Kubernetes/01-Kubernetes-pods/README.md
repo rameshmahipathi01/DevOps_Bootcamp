@@ -44,17 +44,7 @@ Pods are ephemeral in nature, meaning they can be recreated automatically if ter
 ```
 
 ---
-## Pod Manifest Explanation
-
-This is where your repo becomes strong.
-
-Instead of only showing YAML,
-explain EVERY section.
-
----
-
 ## Pod Manifest Overview
-
 The Pod manifest defines the desired state of the Catalog application Pod.
 ```yaml
 apiVersion: apps/v1
@@ -186,8 +176,6 @@ If the readiness probe fails:
 - rnetes removes the Pod from service endpoints
 - affic is not routed to the Pod
 
-
-THIS is what makes repo high quality.
 
 ---
 ## Deploy the Pod
