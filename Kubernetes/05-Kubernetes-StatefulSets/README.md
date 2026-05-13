@@ -306,31 +306,26 @@ Apply all manifests:
 ```bash
 kubectl apply -f manifests/
 ```
+![create-resources](screenshots/01-create-all-resources.png)
 
 ## Verify StatefulSet Resources
-
 Check StatefulSets:
-
 ```bash
 kubectl get statefulsets
 ```
-
 Check Pods:
-
 ```bash
 kubectl get pods -o wide
 ```
-
 Check Services:
-
 ```bash
 kubectl get svc
 ```
+![verify-resources](screenshots/02-verify-resource-creation.png)
+![logs](screenshots/03-kubectl-logs.png)
 
 ## Verify Stateful DNS Resolution
-
 Launch a temporary DNS test Pod:
-
 ```bash
 kubectl run dns-test \
 --image=busybox:1.28 \
@@ -338,11 +333,11 @@ kubectl run dns-test \
 ```
 
 Inside the container:
-
 ```bash
 nslookup catalog-mysql
 nslookup catalog-mysql-0.catalog-mysql
 ```
+![dns](screenshots/04-DNS-resolution.png)
 
 This verifies:
 - Headless Service DNS
@@ -362,20 +357,24 @@ Pod IP Address
 ```
 
 ## Scale the StatefulSet
-
 Scale up the StatefulSet:
-
 ```bash
 kubectl scale statefulset catalog-mysql --replicas=3
 ```
 
 Observe sequential Pod creation:
-
 ```text
 catalog-mysql-0
 catalog-mysql-1
 catalog-mysql-2
 ```
+![scale-replica](screenshots/05-scale-out-replicas-order-and-dns-check.png)
+
+## Scale-down replicas
+```bash
+kubectl scale statefulset catalog-mysql --replicas=1
+```
+![scaledown](screenshots/06-scale-down-replicas.png)
 
 ## Important Clarification - Scaling Does Not Create MySQL Replication
 
@@ -402,19 +401,7 @@ Kubernetes recreates the Pod using:
 - the same Pod name
 - the same identity
 - the same DNS name
-
-## Stateful Pod Recreation
-
-Delete a Pod:
-
-```bash
-kubectl delete pod catalog-mysql-0
-```
-
-Kubernetes recreates the Pod using:
-- the same Pod name
-- the same identity
-- the same DNS name
+![delete-pod](screenshots/07-delete-pod-from-deployment.png)
 
 ## Verify Database Tables
 
@@ -425,21 +412,21 @@ SHOW DATABASES;
 USE catalogdb;
 SHOW TABLES;
 ```
+![connect-to-mysql](screenshots/08-conenct-mysql-client-pod.png)
+![sql-commands](screenshots/09-run-SQL-queries.png)
 
 ## Verify Application Connectivity
-
 Forward traffic to the Catalog Service:
 
 ```bash
 kubectl port-forward svc/catalog-service 7080:8080
 ```
+![port-forwarding](screenshots/10-port-forwarding.png)
 
 Verify topology endpoint:
-
 ```text
 http://localhost:7080/topology
 ```
-
 Expected result:
 
 ```json
@@ -448,14 +435,20 @@ Expected result:
   "persistenceProvider": "mysql"
 }
 ```
+![topology](screenshots/11-topology.png)
+
+Verify health, size and tags
+![health](screenshots/12-health.png)
+![size](screenshots/14-catalog-size.png)
+![tags](screenshots/15-catalog-tags.png)
 
 ## Cleanup
 
 Delete all resources:
-
 ```bash
 kubectl delete -f manifests/
 ```
+![clean-up](screenshots/16-clean-up-resources.png)
 
 ## Key Learning Outcomes
 
@@ -471,3 +464,7 @@ This section covered the following Kubernetes concepts:
 - Database connectivity inside Kubernetes
 - Stateful application networking
 
+
+---
+## Author
+Ramesh Mahipathi
