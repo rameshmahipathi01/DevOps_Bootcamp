@@ -286,6 +286,9 @@ Then verified actual secret contents:
 ```bash
 kubectl exec -it <pod-name> -- cat /mnt/secrets-store/MYSQL_USER
 ```
+![secret-creation](screenshots/01-secret-creation-validation-retrieval.png)
+![apply-manifest](screenshots/02-apply-manifests.png)
+![verify-secrets-mounts](screenshots/03-verify-secrets-mounted-to-pods.png)
 
 This confirms:
 - CSI Driver is working
@@ -475,3 +478,7 @@ We successfully integrated:
 - StatefulSets and Deployments
 
 The Catalog application now retrieves MySQL credentials securely at runtime without storing plaintext secrets inside Kubernetes.
+
+---
+## Author
+Ramesh Mahipathi
