@@ -55,6 +55,8 @@ helm pull oci://public.ecr.aws/aws-containers/retail-store-sample-ui-chart \
 - Downloads the chart locally
 - Extracts (`--untar`) the chart contents into a folder
 
+![pull ECR](screenshots/01-install-repo.png)
+
 ---
 
 ## Verify Extracted Folder
@@ -86,6 +88,8 @@ brew install tree
 ```bash
 tree -a || true
 ```
+
+![folder-structure](screenshots/02-folder-structure.png)
 
 ---
 
@@ -267,6 +271,7 @@ This is one of the most important Helm skills.
 helm show values oci://public.ecr.aws/aws-containers/retail-store-sample-ui-chart \
   --version 1.3.0 | less
 ```
+![show-values](screenshots/03-helm-show-values.png)
 
 This helps discover:
 - Configurable parameters
@@ -282,7 +287,7 @@ This helps discover:
 ```bash
 cat ui/values.yaml
 ```
-
+![cat-values.yaml](screenshots/04-cat-values-yaml.png)
 ---
 
 ## Optional Discovery Commands
@@ -302,7 +307,7 @@ helm show chart oci://public.ecr.aws/aws-containers/retail-store-sample-ui-chart
 helm show readme oci://public.ecr.aws/aws-containers/retail-store-sample-ui-chart \
   --version 1.3.0
 ```
-
+![show-chart-readme](screenshots/05-show-chrt-readme.png)
 ---
 
 # Step-05: Lint & Render (No Cluster Needed)
@@ -371,6 +376,8 @@ The goal is to:
 
 This is heavily used in production CI/CD pipelines.
 
+![lint-render](screenshots/06-Lint-and-Render.png)
+
 ---
 
 # Step-06: (Optional) Install Locally From the Unpacked Chart
@@ -407,6 +414,7 @@ helm status ui-local --show-resources
 
 kubectl get pods,svc,ing
 ```
+![install-locally](screenshots/07-install-locally.png)
 
 ---
 
@@ -428,7 +436,7 @@ to:
 
 ```yaml
 app:
-  theme: orange
+  theme: orange to default
 ```
 
 ---
@@ -438,6 +446,8 @@ app:
 ```bash
 helm template ui ./ui -f ../retailstore-apps/values-ui.yaml | less
 ```
+
+![make-cahnge](screenshots/08-make-change-re-render.png
 
 ---
 
@@ -535,6 +545,7 @@ exists.
 ```bash
 helm test ui-local
 ```
+[test-local](screenshots/09-helm-test-local.png)
 
 ---
 
@@ -556,9 +567,9 @@ Tests run only after the release is installed successfully.
 ```bash
 helm uninstall ui-local
 ```
-
 This removes all Kubernetes resources created by the release.
 
+![uninstall](screenshots/10-uninstall-ui-local.png)
 ---
 
 # Step-10: Handy Reference Commands (Cheat-Sheet)
