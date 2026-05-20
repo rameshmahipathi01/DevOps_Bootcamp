@@ -210,6 +210,8 @@ export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output tex
 Purpose:
 - Avoid hardcoding values repeatedly
 
+![env-vars](screenshots/03-env-vars.png)
+
 ### Create IAM Policy
 This Policy defines:
 - What actions are allowed?
@@ -233,7 +235,7 @@ aws iam create-policy \
   --policy-name AWSLoadBalancerControllerIAMPolicy_${EKS_CLUSTER_NAME} \
   --policy-document file://aws-load-balancer-controller-policy.json
 ```
-
+![IAM-role](screenshots/04-create-LB-IAM-role.png)
 
 ### Create Trust Policy File
 ```yaml
@@ -255,6 +257,7 @@ cat <<EOF > aws-load-balancer-controller-trust-policy.json
 }
 EOF
 ```
+![trust-policy](screenshots/05-IAM-role-trust-policy.png)
 
 ### Create IAM Role and Attach Policy
 ```bash
@@ -272,6 +275,7 @@ aws iam attach-role-policy \
 aws iam list-attached-role-policies \
   --role-name AmazonEKS_LBC_Role_${EKS_CLUSTER_NAME}
 ```
+![iam-role-policy-attach](screenshots/06-IAM-role-attach-policy.png)
 
 ### Create EKS Pod Identity Association
 ```bash
@@ -281,6 +285,7 @@ aws eks create-pod-identity-association \
   --service-account aws-load-balancer-controller \
   --role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/AmazonEKS_LBC_Role_${EKS_CLUSTER_NAME}
 ```
+![PIA](screenshots/07-create-pod-identity-association.png)
 
 ---
 ## Step-02 – Install AWS Load Balancer Controller (Helm)
@@ -289,6 +294,7 @@ aws eks create-pod-identity-association \
 helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 ```
+![help-repo-update](screenshots/08-install-helm-repo-update.png)
 
 ### Install Load Balancer Controller
 ```bash
@@ -310,6 +316,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set serviceAccount.create=true \
   --set serviceAccount.name=aws-load-balancer-controller  
 ```
+![install-LB-controller](screenshots/09-Install-LB-Controller.png)
 
 Explanation:
 - serviceAccount.create=true → Creates the ServiceAccount automatically during Helm installation.
@@ -328,6 +335,7 @@ Check Helm status:
 ```bash
 helm status aws-load-balancer-controller -n kube-system
 ```
+![verify-helm-release](screenshots/10-Verify-helm-release.png)
 
 ---
 ## Step-03: Verify Controller Deployment
@@ -341,7 +349,7 @@ Check deployment and logs:
 kubectl get deployment -n kube-system aws-load-balancer-controller
 kubectl logs -n kube-system -l app.kubernetes.io/name=aws-load-balancer-controller
 ```
-
+![verify-controller-deployment](screenshots/11-verify-controller-deployment.png)
 
 ---
 ## Author

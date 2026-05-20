@@ -5,7 +5,7 @@ aws_region = "ap-south-1"
 environment_name = "dev"
 
 # Cluster Name
-cluster_name = "ramesh-eks"
+cluster_name = "eks"
 
 # Kubernetes Version
 cluster_version = "1.34"
