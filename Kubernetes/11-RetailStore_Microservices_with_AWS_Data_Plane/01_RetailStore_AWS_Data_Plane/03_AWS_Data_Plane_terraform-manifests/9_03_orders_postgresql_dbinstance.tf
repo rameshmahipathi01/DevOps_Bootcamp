@@ -1,6 +1,6 @@
 # RDS PostgreSQL Instance
 resource "aws_db_instance" "orders_postgres" {
-  identifier             = "orders-postgres-db"
+  identifier             = "orders-postgres-db-ramesh"
   engine                 = "postgres"
   engine_version         = "17.6"
   instance_class         = "db.t4g.micro"

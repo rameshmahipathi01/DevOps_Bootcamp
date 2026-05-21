@@ -16,5 +16,5 @@ locals {
   environment = var.environment_name # Example: "dev"
 
   # Standardized naming prefix: "<division>-<env>"
-  name = "${local.owners}-${local.environment}" # Example: "retail-dev"
+  name = "${local.owners}-${local.environment}-ramesh" # Example: "retail-dev"
 }

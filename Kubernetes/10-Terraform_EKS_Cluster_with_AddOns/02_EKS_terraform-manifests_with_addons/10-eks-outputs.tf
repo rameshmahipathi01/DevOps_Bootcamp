@@ -77,3 +77,12 @@ output "configure_kubectl" {
 
   value = "aws eks --region ${var.aws_region} update-kubeconfig --name ${local.eks_cluster_name}"
 }
+
+
+# eks cluster security group id
+output "eks_cluster_security_group_id" {
+
+  description = "Security Group ID for EKS Cluster"
+
+  value = aws_eks_cluster.main.vpc_config[0].cluster_security_group_id
+}

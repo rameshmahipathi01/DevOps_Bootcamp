@@ -1,6 +1,6 @@
 # RDS MySQL Database Instance 
 resource "aws_db_instance" "catalog_rds" {
-  identifier               = "mydb3"
+  identifier               = "mydb3-ramesh"
   engine                   = "mysql"
   engine_version           = "8.0"
   instance_class           = "db.t3.micro"
@@ -8,7 +8,7 @@ resource "aws_db_instance" "catalog_rds" {
   db_name                  = "catalogdb"
   username                 = local.retailstore_secret_json.username
   password                 = local.retailstore_secret_json.password
-  db_subnet_group_name     = aws_db_subnet_group.rds_private.name
+  db_subnet_group_name     = aws_db_subnet_group.rds_public.name
   vpc_security_group_ids   = [aws_security_group.rds_mysql_sg.id]
   skip_final_snapshot      = true
   publicly_accessible      = false

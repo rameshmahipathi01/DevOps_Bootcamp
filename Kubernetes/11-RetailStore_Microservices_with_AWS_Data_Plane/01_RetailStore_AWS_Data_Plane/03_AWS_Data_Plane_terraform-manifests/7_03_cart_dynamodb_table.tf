@@ -13,9 +13,9 @@
 # ---------------------------------------------------------------
 
 # DynamoDB Table: Items - us-west-2
-resource "aws_dynamodb_table" "items_west2" {
-  provider     = aws.west2
-  name         = "Items"
+resource "aws_dynamodb_table" "items_south1" {
+  #provider    = aws.south1
+  name         = "Items-db-ramesh"
   billing_mode = "PAY_PER_REQUEST" # On-demand pricing (no capacity planning)
   hash_key     = "id"
 
